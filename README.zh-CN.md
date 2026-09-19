@@ -1,5 +1,12 @@
 # alpine-chrome-vnc
 
+[![Build and Publish](https://github.com/mylastfree/alpine-chrome-vnc/actions/workflows/build.yml/badge.svg)](https://github.com/mylastfree/alpine-chrome-vnc/actions/workflows/build.yml)
+[![GHCR](https://img.shields.io/badge/ghcr.io-alpine--chrome--vnc-2496ED?logo=docker&logoColor=white)](https://github.com/mylastfree/alpine-chrome-vnc/pkgs/container/alpine-chrome-vnc)
+[![Image Size](https://img.shields.io/badge/image%20size-1.2%20GB-blue)](https://github.com/mylastfree/alpine-chrome-vnc/pkgs/container/alpine-chrome-vnc)
+[![Base](https://img.shields.io/badge/base-alpine%203.23-0D597F?logo=alpinelinux&logoColor=white)](https://alpinelinux.org/)
+[![Chromium](https://img.shields.io/badge/chromium-149-4285F4?logo=googlechrome&logoColor=white)](https://www.chromium.org/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 基于 Alpine Linux 的极简远程 Chromium 容器，专为小内存 VPS（1核1G）优化。
 
 浏览器打开 noVNC 页面即可使用完整 Chromium，支持中日韩字体与**双向剪贴板同步**。
@@ -29,6 +36,31 @@ Chromium 本身只占约 100 MB，其余全是远程桌面框架的开销。
 - **低端设备模式** — `--enable-low-end-device-mode` 进一步降低内存
 - **supervisord 管理** — 7 个进程，失败自动重启
 
+## 从镜像仓库拉取
+
+每次推送到 `main` 都会自动构建并发布到 GHCR：
+
+```bash
+docker pull ghcr.io/mylastfree/alpine-chrome-vnc:latest
+
+docker run -d --name chrome-lite \
+  --restart unless-stopped \
+  -e TZ=Asia/Shanghai \
+  -e VNC_PASSWORD=change-me-please \
+  -e START_URL=https://example.com \
+  -p 6080:6080 \
+  -v "$PWD/config:/root/.config" \
+  --shm-size=256m --memory=600m --memory-swap=1000m \
+  ghcr.io/mylastfree/alpine-chrome-vnc:latest
+```
+
+打 tag（`v*`）时还会额外发布 `:<version>` 和 `:<major>.<minor>` 标签。
+
+### Docker Hub（可选）
+
+`publish-dockerhub` 这个 job 默认关闭。要启用：添加仓库 secrets
+`DOCKERHUB_USERNAME` + `DOCKERHUB_TOKEN`，并把仓库变量 `DOCKERHUB_ENABLED`
+设为 `true`（Settings → Secrets and variables → Actions）。
 ## 快速开始
 
 ### docker-compose（推荐）

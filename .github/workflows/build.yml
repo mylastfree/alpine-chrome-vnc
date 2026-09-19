@@ -1,4 +1,4 @@
-name: Build
+name: Build and Publish
 
 on:
   push:
@@ -7,7 +7,11 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  GHCR_IMAGE: ghcr.io/${{ github.repository }}
+
 jobs:
+  # ---------- 1. build + smoke test ----------
   build:
     runs-on: ubuntu-latest
     steps:
@@ -43,3 +47,84 @@ jobs:
           docker exec smoke sh -c 'export DISPLAY=:0; echo ci-clip-test | xclip -selection clipboard; sleep 1; xclip -selection clipboard -o'
           echo "--- container logs ---"
           docker logs smoke | tail -20
+
+  # ---------- 2. publish to GHCR (uses built-in GITHUB_TOKEN) ----------
+  publish-ghcr:
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.GHCR_IMAGE }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push to GHCR
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ---------- 3. publish to Docker Hub (opt-in via repo variable) ----------
+  # To enable:
+  #   Settings -> Secrets and variables -> Actions
+  #   Secrets:   DOCKERHUB_USERNAME, DOCKERHUB_TOKEN
+  #   Variables: DOCKERHUB_ENABLED = true
+  publish-dockerhub:
+    needs: build
+    if: github.event_name != 'pull_request' && vars.DOCKERHUB_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/alpine-chrome-vnc
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push to Docker Hub
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha

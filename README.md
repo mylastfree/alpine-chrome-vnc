@@ -1,5 +1,12 @@
 # alpine-chrome-vnc
 
+[![Build and Publish](https://github.com/mylastfree/alpine-chrome-vnc/actions/workflows/build.yml/badge.svg)](https://github.com/mylastfree/alpine-chrome-vnc/actions/workflows/build.yml)
+[![GHCR](https://img.shields.io/badge/ghcr.io-alpine--chrome--vnc-2496ED?logo=docker&logoColor=white)](https://github.com/mylastfree/alpine-chrome-vnc/pkgs/container/alpine-chrome-vnc)
+[![Image Size](https://img.shields.io/badge/image%20size-1.2%20GB-blue)](https://github.com/mylastfree/alpine-chrome-vnc/pkgs/container/alpine-chrome-vnc)
+[![Base](https://img.shields.io/badge/base-alpine%203.23-0D597F?logo=alpinelinux&logoColor=white)](https://alpinelinux.org/)
+[![Chromium](https://img.shields.io/badge/chromium-149-4285F4?logo=googlechrome&logoColor=white)](https://www.chromium.org/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 Ultra-lightweight remote Chromium container on Alpine Linux, tuned for small VPS instances (1 vCPU / 1 GB RAM).
 
 Access a full desktop Chromium from any browser over noVNC — with CJK font support and bidirectional clipboard.
@@ -30,6 +37,40 @@ Result: **63% smaller image**, **~36% less RAM**, same functionality.
 - **supervisord** — 7 managed processes, auto-restart on failure
 - **Tiny footprint** — Xvfb 258 MB virt / x11vnc 33 MB / websockify 7 MB
 
+## Pull from a registry
+
+Prebuilt multi-arch images are published to GHCR on every push to `main`:
+
+```bash
+docker pull ghcr.io/mylastfree/alpine-chrome-vnc:latest
+
+docker run -d --name chrome-lite \
+  --restart unless-stopped \
+  -e TZ=Asia/Shanghai \
+  -e VNC_PASSWORD=change-me-please \
+  -e START_URL=https://example.com \
+  -p 6080:6080 \
+  -v "$PWD/config:/root/.config" \
+  --shm-size=256m --memory=600m --memory-swap=1000m \
+  ghcr.io/mylastfree/alpine-chrome-vnc:latest
+```
+
+Or with docker-compose:
+
+```yaml
+services:
+  chrome:
+    image: ghcr.io/mylastfree/alpine-chrome-vnc:latest
+    # ... same environment / ports / volumes as below
+```
+
+Tagged releases (`v*`) also publish `:<version>` and `:<major>.<minor>`.
+
+### Docker Hub (optional)
+
+The `publish-dockerhub` job is opt-in. To enable it, add repository secrets
+`DOCKERHUB_USERNAME` + `DOCKERHUB_TOKEN` and set the repository variable
+`DOCKERHUB_ENABLED` to `true` (Settings → Secrets and variables → Actions).
 ## Quick start
 
 ### docker-compose (recommended)
