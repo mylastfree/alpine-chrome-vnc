@@ -25,7 +25,7 @@
 |---|---|---|---|
 | `linuxserver/chrome` | 3.21 GB | 367 MB | python3 (Selkies/WebRTC) 168 MB + labwc 100 MB |
 | `kasmweb/chrome` | 1.36 GB | 很大 | 完整 Kasm 工作区 |
-| **本项目** | **1.2 GB** | **~235 MB** | websockify 7.3 MB + x11vnc 5.6 MB |
+| **本项目** | **1.02 GB** | **~235 MB** | websockify 7.3 MB + x11vnc 5.6 MB |
 
 Chromium 本身只占约 100 MB，其余全是远程桌面框架的开销。
 本项目用 **X11 + x11vnc + noVNC** 替换掉 Selkies/WebRTC + Wayland。
@@ -34,7 +34,7 @@ Chromium 本身只占约 100 MB，其余全是远程桌面框架的开销。
 
 ## 特性
 
-- **Alpine 3.23** 基础镜像（8.4 MB），成品 1.2 GB
+- **Alpine 3.23** 基础镜像（8.4 MB），成品 1.02 GB
 - **Chromium 149**（Alpine musl 构建）
 - **中文字体** — Noto CJK 共 30 个字体，界面语言 `--lang=zh-CN`
 - **双向剪贴板** — `autocutsel` 同步 X11 CLIPBOARD ↔ PRIMARY，经 noVNC 可用
@@ -136,7 +136,7 @@ docker run -d --name chrome-lite \
 |---|---|
 | 容器内存（空白页） | 303 MB |
 | 容器内存（重度 SPA） | 235–335 MB |
-| 镜像大小 | 1.2 GB |
+| 镜像大小 | 1.02 GB |
 | noVNC 可访问 | HTTP 200 |
 | 剪贴板往返 | 已验证（`xclip` 写入后能读回） |
 

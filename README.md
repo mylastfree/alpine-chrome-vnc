@@ -25,7 +25,7 @@ Popular remote-browser images carry a lot of framework overhead that hurts on ti
 |---|---|---|---|
 | `linuxserver/chrome` | 3.21 GB | 367 MB | python3 (Selkies/WebRTC) 168 MB + labwc 100 MB |
 | `kasmweb/chrome` | 1.36 GB | heavy | full Kasm workspace |
-| **alpine-chrome-vnc** | **1.2 GB** | **~235 MB** | websockify 7.3 MB + x11vnc 5.6 MB |
+| **alpine-chrome-vnc** | **1.02 GB** | **~235 MB** | websockify 7.3 MB + x11vnc 5.6 MB |
 
 Chromium itself only needs ~100 MB — the rest is the remote-desktop stack.
 This project replaces Selkies/WebRTC + Wayland with plain **X11 + x11vnc + noVNC**.
@@ -34,7 +34,7 @@ Result: **63% smaller image**, **~36% less RAM**, same functionality.
 
 ## Features
 
-- **Alpine 3.23** base — 8.4 MB, 1.2 GB final image
+- **Alpine 3.23** base — 8.4 MB, 1.02 GB final image
 - **Chromium 149** (Alpine musl build)
 - **CJK fonts** — Noto CJK, 30 fonts, UI language `--lang=zh-CN`
 - **Bidirectional clipboard** — `autocutsel` syncs X11 CLIPBOARD ↔ PRIMARY, works through noVNC
@@ -146,7 +146,7 @@ Tested on a 1 vCPU / 1 GB RAM KVM VPS (AMD EPYC-Milan), Chromium 149:
 |---|---|
 | Container RAM (blank page) | 303 MB |
 | Container RAM (heavy SPA) | 235–335 MB |
-| Image size | 1.2 GB |
+| Image size | 1.02 GB |
 | noVNC reachable | HTTP 200 |
 | Clipboard round-trip | verified (`xclip` write → read back) |
 
