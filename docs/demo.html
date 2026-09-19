@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>alpine-chrome-vnc 中文渲染演示</title>
+<style>
+  body{margin:0;font-family:"Noto Sans CJK SC","Noto Sans",sans-serif;
+       background:linear-gradient(135deg,#0f172a,#1e293b);color:#e2e8f0;
+       height:100vh;display:flex;align-items:center;justify-content:center}
+  .card{background:#1e293b;border:1px solid #334155;border-radius:12px;
+        padding:36px 48px;box-shadow:0 20px 50px rgba(0,0,0,.5);max-width:820px}
+  h1{margin:0 0 6px;font-size:30px;color:#38bdf8}
+  .sub{color:#94a3b8;font-size:14px;margin-bottom:24px}
+  table{border-collapse:collapse;width:100%;font-size:15px}
+  td{padding:9px 14px;border-bottom:1px solid #334155}
+  td:first-child{color:#94a3b8;width:190px}
+  .ok{color:#4ade80;font-weight:600}
+  .num{color:#fbbf24;font-weight:600}
+  .foot{margin-top:22px;font-size:13px;color:#64748b}
+</style></head>
+<body><div class="card">
+  <h1>远程 Chromium 中文渲染测试</h1>
+  <div class="sub">alpine-chrome-vnc · Alpine 3.23 · Chromium 149 · noVNC</div>
+  <table>
+    <tr><td>简体中文</td><td>广告收入报表 · 点击率 · 千次展示收入</td></tr>
+    <tr><td>繁体中文</td><td>廣告收益報表 · 點擊率 · 千次曝光收益</td></tr>
+    <tr><td>日本語</td><td>広告収益レポート · クリック率</td></tr>
+    <tr><td>한국어</td><td>광고 수익 보고서 · 클릭률</td></tr>
+    <tr><td>中英混排</td><td>Estimated earnings 预估收益 ￥1,234.56</td></tr>
+    <tr><td>字体状态</td><td><span class="ok">Noto Sans CJK SC / TC / JP / KR</span> 已加载</td></tr>
+    <tr><td>渲染引擎</td><td>Xvfb 1600x900x24 · <span class="num">30</span> 个 CJK 字体</td></tr>
+  </table>
+  <div class="foot">此页面用于验证容器内中文字体渲染，不包含任何账号数据。</div>
+</div></body></html>

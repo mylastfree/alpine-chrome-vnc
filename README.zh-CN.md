@@ -11,6 +11,12 @@
 
 浏览器打开 noVNC 页面即可使用完整 Chromium，支持中日韩字体与**双向剪贴板同步**。
 
+## 截图
+
+![screenshot](docs/screenshot.png)
+
+容器内 Chromium 149 的中日韩渲染效果 —— 简繁中文、日文、韩文、中英混排，
+全部使用 Noto Sans CJK。
 ## 为什么做这个
 
 主流远程浏览器镜像的框架开销太大，在小 VPS 上很吃力：

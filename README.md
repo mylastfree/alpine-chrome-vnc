@@ -11,6 +11,12 @@ Ultra-lightweight remote Chromium container on Alpine Linux, tuned for small VPS
 
 Access a full desktop Chromium from any browser over noVNC — with CJK font support and bidirectional clipboard.
 
+## Screenshot
+
+![screenshot](docs/screenshot.png)
+
+Chromium 149 rendering CJK content inside the container — Simplified/Traditional Chinese,
+Japanese, Korean, and mixed CJK+Latin, all via Noto Sans CJK.
 ## Why this exists
 
 Popular remote-browser images carry a lot of framework overhead that hurts on tiny VPS:
