@@ -12,8 +12,8 @@ RUN apk add --no-cache \
         openbox \
         # 浏览器
         chromium \
-        # 中英文字体
-        font-noto-cjk font-noto-extra font-dejavu \
+        # 中英文字体(只需 noto-cjk + dejavu, noto-extra 多占 168MB 且对中文无增益)
+        font-noto-cjk font-dejavu \
         # 进程管理与其他
         supervisor bash tzdata \
     && rm -rf /var/cache/apk/* /tmp/*
@@ -29,6 +29,7 @@ ENV DISPLAY=:0 \
     TZ=America/New_York \
     LANG=en_US.UTF-8
 
+COPY fonts.conf /etc/fonts/local.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
