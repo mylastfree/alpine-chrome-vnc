@@ -27,12 +27,19 @@ jobs:
 
       - name: Smoke test
         run: |
-          docker run -d --name t \
+          docker run -d --name smoke \
             -e VNC_PASSWORD=test -e START_URL=about:blank \
             -p 6080:6080 --shm-size=256m chrome-alpine:ci
-          sleep 40
-          docker exec t supervisorctl status
-          curl -fsS -o /dev/null http://127.0.0.1:6080/vnc.html
-          echo "noVNC OK"
-          docker exec t sh -c 'fc-list :lang=zh | wc -l'
-          docker logs t | tail -20
+          sleep 60
+          echo "--- supervisorctl status ---"
+          docker exec smoke supervisorctl status
+          echo "--- running process count ---"
+          docker exec smoke supervisorctl status | grep -c RUNNING
+          echo "--- noVNC reachability ---"
+          curl -fsS -o /dev/null http://127.0.0.1:6080/vnc.html && echo "noVNC OK"
+          echo "--- CJK font count ---"
+          docker exec smoke sh -c 'fc-list :lang=zh | wc -l'
+          echo "--- clipboard round-trip ---"
+          docker exec smoke sh -c 'export DISPLAY=:0; echo ci-clip-test | xclip -selection clipboard; sleep 1; xclip -selection clipboard -o'
+          echo "--- container logs ---"
+          docker logs smoke | tail -20
