@@ -89,8 +89,17 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # ---------- 3. publish to Docker Hub (opt-in via repo variable) ----------
-  # To enable:
+      - name: Set package visibility to public
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api --method PATCH \
+            "/user/packages/container/${{ github.event.repository.name }}/visibility" \
+            -f visibility=public && echo "package set to public" \
+            || echo "::warning::could not set package visibility automatically - set it manually at https://github.com/users/${{ github.repository_owner }}/packages/container/${{ github.event.repository.name }}/settings"
+
+  # ---------- 3. publish to Docker Hub (opt-in via repo variable) ----------  # To enable:
   #   Settings -> Secrets and variables -> Actions
   #   Secrets:   DOCKERHUB_USERNAME, DOCKERHUB_TOKEN
   #   Variables: DOCKERHUB_ENABLED = true
